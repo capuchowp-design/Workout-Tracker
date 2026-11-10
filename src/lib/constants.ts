@@ -133,3 +133,11 @@ export const SEED_EXERCISES: Exercise[] = [
   ex('fri', 6, 'Rosca Martelo', 'arms', 3, '10-12', 1, 60, SS),
   ex('fri', 7, 'Tríceps Corda', 'arms', 3, '10-12', 1, 60, SS),
 ];
+
+/**
+ * Fotos/GIFs reais de execução (opcional). Coloque o arquivo em `public/exercises/`
+ * e informe o caminho relativo, por exemplo:
+ *   'ex-mon-1': 'exercises/agachamento.webp',
+ * Quando existir imagem para o exercício, ela substitui a ilustração animada.
+ */
+export const EXERCISE_IMAGES: Partial<Record<string, string>> = {};

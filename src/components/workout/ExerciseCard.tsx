@@ -1,8 +1,11 @@
 import { ArrowLeftRight, Link2 } from 'lucide-react';
 import { useState } from 'react';
-import { MUSCLE_LABELS } from '../../lib/constants';
+import { EXERCISE_IMAGES, MUSCLE_LABELS } from '../../lib/constants';
+import { DEMO_BY_ID } from '../../lib/poses';
 import type { Exercise } from '../../types';
+import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
+import { ExerciseDemo } from './ExerciseDemo';
 
 interface Props {
   exercise: Exercise;
@@ -11,7 +14,11 @@ interface Props {
 
 export function ExerciseCard({ exercise, large = false }: Props) {
   const [showAlt, setShowAlt] = useState(false);
+  const [showMedia, setShowMedia] = useState(large);
   const name = showAlt && exercise.alternativeName ? exercise.alternativeName : exercise.name;
+  const image = EXERCISE_IMAGES[exercise.id];
+  const demoKey = DEMO_BY_ID[exercise.id];
+  const hasMedia = Boolean(image ?? demoKey);
 
   return (
     <Card>
@@ -46,6 +53,26 @@ export function ExerciseCard({ exercise, large = false }: Props) {
       {exercise.notes && (
         <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">{exercise.notes}</p>
       )}
+
+      {hasMedia && (
+        <Button
+          variant="ghost"
+          className="mt-2 -ml-2"
+          aria-expanded={showMedia}
+          onClick={() => setShowMedia((v) => !v)}
+        >
+          {showMedia ? 'Ocultar execução' : 'Ver execução'}
+        </Button>
+      )}
+      {showMedia && image && (
+        <img
+          src={`${import.meta.env.BASE_URL}${image}`}
+          alt={`Execução: ${name}`}
+          loading="lazy"
+          className="mt-3 w-full rounded-xl"
+        />
+      )}
+      {showMedia && !image && demoKey && <ExerciseDemo demoKey={demoKey} label={name} />}
     </Card>
   );
 }

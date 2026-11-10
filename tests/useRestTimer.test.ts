@@ -1,8 +1,20 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useRestTimer } from '../src/hooks/useRestTimer';
+import { playFinish, playTick } from '../src/lib/sound';
+import { useUIStore } from '../src/stores/uiStore';
 
-beforeEach(() => vi.useFakeTimers());
+vi.mock('../src/lib/sound', () => ({
+  unlockAudio: vi.fn(),
+  playTick: vi.fn(),
+  playFinish: vi.fn(),
+}));
+
+beforeEach(() => {
+  vi.useFakeTimers();
+  vi.clearAllMocks();
+  useUIStore.setState({ soundEnabled: true });
+});
 afterEach(() => vi.useRealTimers());
 
 describe('useRestTimer', () => {
@@ -25,6 +37,27 @@ describe('useRestTimer', () => {
     expect(result.current.running).toBe(false);
     expect(result.current.remaining).toBe(0);
     expect(onFinish).toHaveBeenCalledTimes(1);
+  });
+
+  it('toca bipes nos últimos 3 segundos e ao terminar', () => {
+    const { result } = renderHook(() => useRestTimer());
+    act(() => result.current.start(5));
+    act(() => {
+      vi.advanceTimersByTime(5200);
+    });
+    expect(playTick).toHaveBeenCalledTimes(3);
+    expect(playFinish).toHaveBeenCalledTimes(1);
+  });
+
+  it('não toca nada com o som desligado', () => {
+    useUIStore.setState({ soundEnabled: false });
+    const { result } = renderHook(() => useRestTimer());
+    act(() => result.current.start(4));
+    act(() => {
+      vi.advanceTimersByTime(4200);
+    });
+    expect(playTick).not.toHaveBeenCalled();
+    expect(playFinish).not.toHaveBeenCalled();
   });
 
   it('permite ajustar o tempo e parar', () => {

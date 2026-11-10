@@ -10,6 +10,7 @@ import { SetLogger, type SetValues } from '../../components/workout/SetLogger';
 import { useRestTimer } from '../../hooks/useRestTimer';
 import { useWorkoutSession } from '../../hooks/useWorkoutSession';
 import { CARDIO_DAYS } from '../../lib/constants';
+import { unlockAudio } from '../../lib/sound';
 import { formatDuration, repsBottom, vibrate } from '../../lib/utils';
 import { getLastSetsForExercise } from '../../services/session.service';
 import { useWorkoutStore } from '../../stores/workoutStore';
@@ -77,6 +78,7 @@ export default function ActiveWorkoutPage() {
 
   const handleSave = async (values: SetValues) => {
     if (!current) return;
+    unlockAudio();
     const prev = w.loggedForCurrent.at(-1);
     await w.saveSet({
       exerciseId: current.id,

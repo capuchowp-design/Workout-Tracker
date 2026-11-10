@@ -4,6 +4,7 @@ import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { Modal } from '../../components/ui/Modal';
 import { useInstallPrompt } from '../../hooks/useInstallPrompt';
+import { playFinish, unlockAudio } from '../../lib/sound';
 import { toISODate } from '../../lib/utils';
 import { exportAll, importAll, isBackupFile } from '../../services/workout.service';
 import { useUIStore, type Theme } from '../../stores/uiStore';
@@ -17,7 +18,7 @@ const THEMES: { value: Theme; label: string }[] = [
 ];
 
 export default function SettingsPage() {
-  const { theme, setTheme } = useUIStore();
+  const { theme, setTheme, soundEnabled, setSoundEnabled } = useUIStore();
   const { canInstall, install } = useInstallPrompt();
   const fileRef = useRef<HTMLInputElement>(null);
   const [pending, setPending] = useState<BackupFile | null>(null);
@@ -73,6 +74,38 @@ export default function SettingsPage() {
             </Button>
           ))}
         </div>
+      </Card>
+
+      <Card className="flex flex-col gap-3">
+        <h2 className="font-semibold">Som do cronômetro</h2>
+        <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Som do cronômetro">
+          <Button
+            role="radio"
+            aria-checked={soundEnabled}
+            variant={soundEnabled ? 'primary' : 'secondary'}
+            onClick={() => setSoundEnabled(true)}
+          >
+            Ligado
+          </Button>
+          <Button
+            role="radio"
+            aria-checked={!soundEnabled}
+            variant={!soundEnabled ? 'primary' : 'secondary'}
+            onClick={() => setSoundEnabled(false)}
+          >
+            Desligado
+          </Button>
+        </div>
+        <Button
+          fullWidth
+          variant="ghost"
+          onClick={() => {
+            unlockAudio();
+            playFinish();
+          }}
+        >
+          Testar som
+        </Button>
       </Card>
 
       <Card className="flex flex-col gap-3">
