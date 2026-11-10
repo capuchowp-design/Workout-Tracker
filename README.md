@@ -26,7 +26,7 @@ Vite 5 · React 18 · TypeScript strict · Tailwind CSS v3 · Zustand · Dexie.j
 
 ```bash
 npm install
-npm run dev          # http://localhost:5173/workout-tracker-pwa/
+npm run dev          # http://localhost:5173/Workout-Tracker/
 npm run lint
 npm run test:ci      # testes + cobertura (mín. 70% em hooks/ e services/)
 npm run build && npm run preview
@@ -38,10 +38,10 @@ O plano inicial está em `src/lib/constants.ts` (`SEED_EXERCISES`) e é gravado 
 
 ## Deploy (GitHub Pages)
 
-1. Crie o repositório público `workout-tracker-pwa` e envie o código para a branch `main` (inclua o `package-lock.json`).
+1. Crie o repositório público `Workout-Tracker` e envie o código para a branch `main` (inclua o `package-lock.json`).
 2. O workflow `.github/workflows/deploy.yml` roda `lint → test → build → deploy` e publica `dist/` na branch `gh-pages`.
 3. Em **Settings → Pages**, selecione *Deploy from a branch* → `gh-pages` / `/ (root)`.
-4. Acesse `https://<usuario>.github.io/workout-tracker-pwa/`.
+4. Acesse `https://<usuario>.github.io/Workout-Tracker/`.
 
 Se o nome do repositório for outro, altere `base` em `vite.config.ts`.
 
